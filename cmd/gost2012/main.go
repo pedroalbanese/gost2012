@@ -223,7 +223,6 @@ func WritePublicKeyToHex(key *ecdsa.PublicKey) string {
 	c := []byte{}
 	c = append(c, x...)
 	c = append(c, y...)
-	c = append([]byte{0x04}, c...)
 	return hex.EncodeToString(c)
 }
 
