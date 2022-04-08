@@ -33,8 +33,8 @@ func main() {
 	flag.Parse()
 
 	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "GOST2001 CryptoPro - ALBANESE Research Lab")
-		fmt.Fprintln(os.Stderr, "GOST R 34.10-2001 CryptoPro ParamSet (2006)\n")
+		fmt.Fprintln(os.Stderr, "GOST2012 Signer - ALBANESE Research Lab")
+		fmt.Fprintln(os.Stderr, "GOST R 34.10-2012 512-bit ParamSet A\n")
 		fmt.Fprintln(os.Stderr, "Usage of", os.Args[0]+":")
 		flag.PrintDefaults()
 		os.Exit(2)
