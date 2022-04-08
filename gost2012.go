@@ -8,8 +8,8 @@ import (
 )
 
 var initonce sync.Once
-var tc512a *elliptic.CurveParams
-var tc512b *elliptic.CurveParams
+var tc26512a *elliptic.CurveParams
+var tc26512b *elliptic.CurveParams
 
 func initTC26512A() {
 	tc26512a = new(elliptic.CurveParams)
@@ -23,7 +23,7 @@ func initTC26512A() {
 
 func TC26512A() elliptic.Curve {
 	initonce.Do(initTC26512A)
-	return tc512a
+	return tc26512a
 }
 
 func initTC26512B() {
@@ -38,5 +38,5 @@ func initTC26512B() {
 
 func TC26512B() elliptic.Curve {
 	initonce.Do(initTC26512B)
-	return tc512b
+	return tc26512b
 }
