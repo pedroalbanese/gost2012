@@ -1,3 +1,4 @@
+// Parameters for the GOST R 34.10-2012 Elliptic curves
 package main
 
 import (
