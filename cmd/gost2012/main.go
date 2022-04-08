@@ -1,4 +1,3 @@
-// Parameters for the GOST R 34.10-2012 512-bit Elliptic curves
 package main
 
 import (
@@ -126,7 +125,11 @@ func main() {
 
 		verifystatus := Verify(h.Sum(nil), sig, pub)
 		fmt.Println(verifystatus)
-		os.Exit(0)
+		if verifystatus {
+			os.Exit(0)
+		} else {
+			os.Exit(1)
+		}		
 	}
 }
 
