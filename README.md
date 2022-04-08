@@ -1,4 +1,4 @@
-# TC26 GOST2012
+# GOST2012
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](https://github.com/pedroalbanese/gost2012/blob/master/LICENSE.md) 
 [![GoDoc](https://godoc.org/github.com/pedroalbanese/gost2012?status.png)](http://godoc.org/github.com/pedroalbanese/gost2012)
 [![GitHub downloads](https://img.shields.io/github/downloads/pedroalbanese/gost2012/total.svg?logo=github&logoColor=white)](https://github.com/pedroalbanese/gost2012/releases)
