@@ -7,8 +7,8 @@ import (
 )
 
 var initonce sync.Once
-var tc512a *elliptic.CurveParams
-var tc512b *elliptic.CurveParams
+var tc26512a *elliptic.CurveParams
+var tc26512b *elliptic.CurveParams
 
 func initTC26512A() {
 	tc26512a = new(elliptic.CurveParams)
