@@ -1,3 +1,4 @@
+// Parameters for the GOST R 34.10-2012 512-bit Elliptic curves
 package gost2012
 
 import (
