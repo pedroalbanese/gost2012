@@ -7,6 +7,40 @@
 ### GOST R 34.10-2012 512-bit curve ParamSet A and B
 Package implements the elliptic curves originally described in RFC7836
 
+### Usage:
+```
+Usage of gost2012:
+  -derive
+        Derive shared secret.
+  -key string
+        Private/Public key.
+  -keygen
+        Generate keypair.
+  -pub string
+        Remote's side Public key.
+  -sign
+        Sign with Private key.
+  -signature string
+        Signature.
+  -verify
+        Verify with Public key.
+```
+### Examples:
+#### Asymmetric keypair generation (as ECDSA):
+```sh
+./gost2012 -keygen 
+```
+#### Digital signature (ECDSA):
+```sh
+./gost2012 -sign -key $prvkey < file.ext > sign.txt
+sign=$(cat sign.txt)
+./gost2012 -verify -key $pubkey -signature $sign < file.ext
+```
+#### Shared key agreement (ECDH a.k.a. VKO):
+```sh
+./gost2012 -derive -key $prvkey -pub $pubkey
+```
+
 ## License
 
 This project is licensed under the ISC License.
