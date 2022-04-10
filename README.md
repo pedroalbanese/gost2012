@@ -7,7 +7,7 @@
 ### GOST R 34.10-2012 512-bit curve ParamSet A and B
 Package implements the elliptic curves originally described in RFC7836
 
-### Usage:
+## Usage:
 ```
 Usage of gost2012:
   -derive
@@ -25,7 +25,7 @@ Usage of gost2012:
   -verify
         Verify with Public key.
 ```
-### Examples:
+## Examples:
 #### Asymmetric keypair generation (as ECDSA):
 ```sh
 ./gost2012 -keygen 
