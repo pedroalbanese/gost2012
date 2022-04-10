@@ -1,8 +1,10 @@
 # GOST2012
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](https://github.com/pedroalbanese/gost2012/blob/master/LICENSE.md) 
-[![GoDoc](https://godoc.org/github.com/pedroalbanese/gost2012?status.png)](http://godoc.org/github.com/pedroalbanese/gost2012)
 [![GitHub downloads](https://img.shields.io/github/downloads/pedroalbanese/gost2012/total.svg?logo=github&logoColor=white)](https://github.com/pedroalbanese/gost2012/releases)
+[![GoDoc](https://godoc.org/github.com/pedroalbanese/gost2012?status.png)](http://godoc.org/github.com/pedroalbanese/gost2012)
 [![Go Report Card](https://goreportcard.com/badge/github.com/pedroalbanese/gost2012)](https://goreportcard.com/report/github.com/pedroalbanese/gost2012)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/pedroalbanese/gost2012)](https://golang.org)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/pedroalbanese/gost2012)](https://github.com/pedroalbanese/gost2012/releases)
 
 ### GOST R 34.10-2012 512-bit curve ParamSet A and B
 Package implements the elliptic curves originally described in RFC7836
@@ -26,7 +28,7 @@ Usage of gost2012:
         Verify with Public key.
 ```
 ## Examples:
-#### Asymmetric keypair generation (as ECDSA):
+#### Asymmetric keypair generation:
 ```sh
 ./gost2012 -keygen 
 ```
