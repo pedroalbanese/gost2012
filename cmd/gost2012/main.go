@@ -2,76 +2,6 @@
 package main
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
-	"errors"
-	"flag"
-	"fmt"
-	"hash"
-	"io"
-	"log"
-	"math/big"
-	"os"
-
-	"github.com/pedroalbanese/gost2012"
-)
-
-var (
-	derive = flag.Bool("derive", false, "Derive shared secret key.")
-	keygen = flag.Bool("keygen", false, "Generate keypair.")
-	key    = flag.String("key", "", "Private/Public key.")
-	public = flag.String("pub", "", "Remote's side Public key.")
-	sig    = flag.String("signature", "", "Signature.")
-	sign   = flag.Bool("sign", false, "Sign with Private key.")
-	verify = flag.Bool("verify", false, "Verify with Public key.")
-)
-
-func main() {
-	flag.Parse()
-
-	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "GOST2012 Signer - ALBANESE Research Lab")
-		fmt.Fprintln(os.Stderr, "GOST R 34.10-2012 512-bit ParamSet A\n")
-		fmt.Fprintln(os.Stderr, "Usage of", os.Args[0]+":")
-		flag.PrintDefaults()
-		os.Exit(2)
-	}
-
-	var privatekey *ecdsa.PrivateKey
-	var pubkey ecdsa.PublicKey
-	var pub *ecdsa.PublicKey
-	var err error
-	var pubkeyCurve elliptic.Curve
-
-	pubkeyCurve = gost2012.TC26512A()
-
-	if *keygen {
-		if *key != "" {
-			privatekey, err = ReadPrivateKeyFromHex(*key)
-			if err != nil {
-				log.Fatal(err)
-			}
-		} else {
-			privatekey = new(ecdsa.PrivateKey)
-			privatekey, err = ecdsa.GenerateKey(pubkeyCurve, rand.Reader)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-			if len(WritePrivateKeyToHex(privatekey)) != 128 {
-				log.Fatal("Private key too short!")
-				os.Exit(1)
-			}
-		}
-		pubkey = privatekey.PublicKey
-		fmt.Println("Private= " + WritePrivateKeyToHex(privatekey))
-		fmt.Println("Public= " + WritePublicKeyToHex(&pubkey))
-package main
-
-import (
 	"bytes"
 	"crypto"
 	"crypto/ecdsa"
@@ -710,4 +640,3 @@ func kdf(length int, x ...[]byte) ([]byte, bool) {
 func (priv *PrivateKey) Public() crypto.PublicKey {
 	return &priv.PublicKey
 }
-
