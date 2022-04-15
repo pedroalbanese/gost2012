@@ -19,8 +19,8 @@ import (
 	"log"
 	"math/big"
 	"os"
-	"sync"
 
+	"github.com/pedroalbanese/gost2012"
 	"github.com/pedroalbanese/randomart"
 )
 
@@ -53,7 +53,7 @@ func main() {
 	var err error
 	var pubkeyCurve elliptic.Curve
 
-	pubkeyCurve = GOST2012()
+	pubkeyCurve = gost2012.TC26512A()
 
 	if *keygen {
 		if *key != "" {
@@ -153,7 +153,7 @@ func main() {
 	}
 
 	if *enc {
-		pub2, err := ReadPublicKeyFromHexX(*key)
+		public, err := ReadPublicKeyFromHexX(*key)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -161,7 +161,7 @@ func main() {
 		data := os.Stdin
 		io.Copy(buf, data)
 		scanner := string(buf.Bytes())
-		ciphertxt, err := EncryptAsn1(pub2, []byte(scanner), rand.Reader)
+		ciphertxt, err := EncryptAsn1(public, []byte(scanner), rand.Reader)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -195,14 +195,12 @@ func main() {
 }
 
 func Sign(data []byte, privkey *ecdsa.PrivateKey) ([]byte, error) {
-
 	Sum512 := func(msg []byte) []byte {
 		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
-
 	digest := Sum512(data)
 
 	r, s, err := ecdsa.Sign(rand.Reader, privkey, digest[:])
@@ -221,14 +219,12 @@ func Sign(data []byte, privkey *ecdsa.PrivateKey) ([]byte, error) {
 }
 
 func Verify(data, signature []byte, pubkey *ecdsa.PublicKey) bool {
-
 	Sum512 := func(msg []byte) []byte {
 		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
-
 	digest := Sum512(data)
 
 	curveOrderByteSize := pubkey.Curve.Params().P.BitLen() / 8
@@ -241,7 +237,7 @@ func Verify(data, signature []byte, pubkey *ecdsa.PublicKey) bool {
 }
 
 func ReadPrivateKeyFromHex(Dhex string) (*ecdsa.PrivateKey, error) {
-	c := GOST2012()
+	c := gost2012.TC26512A()
 	d, err := hex.DecodeString(Dhex)
 	if err != nil {
 		return nil, err
@@ -261,7 +257,7 @@ func ReadPrivateKeyFromHex(Dhex string) (*ecdsa.PrivateKey, error) {
 }
 
 func ReadPrivateKeyFromHexX(Dhex string) (*PrivateKey, error) {
-	c := GOST2012()
+	c := gost2012.TC26512A()
 	d, err := hex.DecodeString(Dhex)
 	if err != nil {
 		return nil, err
@@ -302,7 +298,7 @@ func ReadPublicKeyFromHex(Qhex string) (*ecdsa.PublicKey, error) {
 		return nil, errors.New("publicKey is not uncompressed.")
 	}
 	pub := new(ecdsa.PublicKey)
-	pub.Curve = GOST2012()
+	pub.Curve = gost2012.TC26512A()
 	pub.X = new(big.Int).SetBytes(q[:64])
 	pub.Y = new(big.Int).SetBytes(q[64:])
 	return pub, nil
@@ -320,7 +316,7 @@ func ReadPublicKeyFromHexX(Qhex string) (*PublicKey, error) {
 		return nil, errors.New("publicKey is not uncompressed.")
 	}
 	pub := new(PublicKey)
-	pub.Curve = GOST2012()
+	pub.Curve = gost2012.TC26512A()
 	pub.X = new(big.Int).SetBytes(q[:64])
 	pub.Y = new(big.Int).SetBytes(q[64:])
 	return pub, nil
@@ -352,24 +348,6 @@ func zeroByteSlice() []byte {
 		0, 0, 0, 0,
 		0, 0, 0, 0,
 	}
-}
-
-var initonce sync.Once
-var gost2012 *elliptic.CurveParams
-
-func initGOST2012() {
-	gost2012 = new(elliptic.CurveParams)
-	gost2012.P, _ = new(big.Int).SetString("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDC7", 16)
-	gost2012.N, _ = new(big.Int).SetString("00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF27E69532F48D89116FF22B8D4E0560609B4B38ABFAD2B85DCACDB1411F10B275", 16)
-	gost2012.B, _ = new(big.Int).SetString("00E8C2505DEDFC86DDC1BD0B2B6667F1DA34B82574761CB0E879BD081CFD0B6265EE3CB090F30D27614CB4574010DA90DD862EF9D4EBEE4761503190785A71C760", 16)
-	gost2012.Gx, _ = new(big.Int).SetString("03", 16)
-	gost2012.Gy, _ = new(big.Int).SetString("7503CFE87A836AE3A61B8816E25450E6CE5E1C93ACF1ABC1778064FDCBEFA921DF1626BE4FD036E93D75E6A50E3A41E98028FE5FC235F5B889A589CB5215F2A4", 16)
-	gost2012.BitSize = 512
-}
-
-func GOST2012() elliptic.Curve {
-	initonce.Do(initGOST2012)
-	return gost2012
 }
 
 type PublicKey struct {
@@ -605,14 +583,12 @@ func randFieldElement(c elliptic.Curve, random io.Reader) (k *big.Int, err error
 
 func intToBytes(x int) []byte {
 	var buf = make([]byte, 4)
-
 	binary.BigEndian.PutUint32(buf, uint32(x))
 	return buf
 }
 
 func kdf(length int, x ...[]byte) ([]byte, bool) {
 	var c []byte
-
 	ct := 1
 	h := sha512.New()
 	for i, j := 0, (length+65)/64; i < j; i++ {
