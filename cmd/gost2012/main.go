@@ -7,6 +7,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/sha512"
 	"encoding/asn1"
 	"encoding/binary"
 	"encoding/hex"
@@ -20,7 +21,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/pedroalbanese/gogost/gost34112012512"
 	"github.com/pedroalbanese/randomart"
 )
 
@@ -99,21 +99,21 @@ func main() {
 
 		b, _ := public.Curve.ScalarMult(public.X, public.Y, private.D.Bytes())
 
-		Sum256 := func(msg []byte) []byte {
-			res := gost34112012512.New()
+		Sum512 := func(msg []byte) []byte {
+			res := sha512.New()
 			res.Write(msg)
 			hash := res.Sum(nil)
 			return []byte(hash)
 		}
 
-		shared := Sum256(b.Bytes())
+		shared := Sum512(b.Bytes())
 		fmt.Printf("Shared= %x\n", shared)
 		os.Exit(0)
 	}
 
 	if *sign {
 		var h hash.Hash
-		h = gost34112012512.New()
+		h = sha512.New()
 
 		if _, err := io.Copy(h, os.Stdin); err != nil {
 			panic(err)
@@ -134,7 +134,7 @@ func main() {
 
 	if *verify {
 		var h hash.Hash
-		h = gost34112012512.New()
+		h = sha512.New()
 
 		if _, err := io.Copy(h, os.Stdin); err != nil {
 			panic(err)
@@ -196,14 +196,14 @@ func main() {
 
 func Sign(data []byte, privkey *ecdsa.PrivateKey) ([]byte, error) {
 
-	Sum256 := func(msg []byte) []byte {
-		res := gost34112012512.New()
+	Sum512 := func(msg []byte) []byte {
+		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
 
-	digest := Sum256(data)
+	digest := Sum512(data)
 
 	r, s, err := ecdsa.Sign(rand.Reader, privkey, digest[:])
 	if err != nil {
@@ -222,14 +222,14 @@ func Sign(data []byte, privkey *ecdsa.PrivateKey) ([]byte, error) {
 
 func Verify(data, signature []byte, pubkey *ecdsa.PublicKey) bool {
 
-	Sum256 := func(msg []byte) []byte {
-		res := gost34112012512.New()
+	Sum512 := func(msg []byte) []byte {
+		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
 
-	digest := Sum256(data)
+	digest := Sum512(data)
 
 	curveOrderByteSize := pubkey.Curve.Params().P.BitLen() / 8
 
@@ -490,14 +490,14 @@ func Encrypt(pub *PublicKey, data []byte, random io.Reader, mode int) ([]byte, e
 		tm = append(tm, data...)
 		tm = append(tm, y2Buf...)
 
-		Sum256 := func(msg []byte) []byte {
-			res := gost34112012512.New()
+		Sum512 := func(msg []byte) []byte {
+			res := sha512.New()
 			res.Write(msg)
 			hash := res.Sum(nil)
 			return []byte(hash)
 		}
 
-		h := Sum256(tm)
+		h := Sum512(tm)
 		c = append(c, h...)
 		ct, ok := kdf(length, x2Buf, y2Buf)
 		if !ok {
@@ -573,14 +573,14 @@ func Decrypt(priv *PrivateKey, data []byte, mode int) ([]byte, error) {
 	tm = append(tm, c...)
 	tm = append(tm, y2Buf...)
 
-	Sum256 := func(msg []byte) []byte {
-		res := gost34112012512.New()
+	Sum512 := func(msg []byte) []byte {
+		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
 
-	h := Sum256(tm)
+	h := Sum512(tm)
 	if bytes.Compare(h, data[128:192]) != 0 {
 		return c, errors.New("Decrypt: failed to decrypt")
 	}
@@ -614,7 +614,7 @@ func kdf(length int, x ...[]byte) ([]byte, bool) {
 	var c []byte
 
 	ct := 1
-	h := gost34112012512.New()
+	h := sha512.New()
 	for i, j := 0, (length+65)/64; i < j; i++ {
 		h.Reset()
 		for _, xx := range x {
