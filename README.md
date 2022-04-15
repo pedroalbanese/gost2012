@@ -12,23 +12,23 @@ Package implements the elliptic curves originally described in RFC 7836
 ```
 Usage of gost2012:
   -dec
-        Decrypt with EC-GOST2012 Privatekey.
+        Decrypt with EC-GOST2012 Private key
   -derive
-        Derive shared secret key.
+        Derive shared secret key
   -enc
-        Encrypt with EC-GOST2012 Publickey.
+        Encrypt with EC-GOST2012 Public key
   -key string
-        Private/Public key.
+        Private/Public key
   -keygen
-        Generate keypair.
+        Generate keypair
   -pub string
-        Remote's side Public key.
+        Remote's side Public key
   -sign
-        Sign with Private key.
+        Sign with Private key
   -signature string
-        Signature.
+        Signature
   -verify
-        Verify with Public key.
+        Verify with Public key
 ```
 ## Examples
 #### Asymmetric keypair generation:
