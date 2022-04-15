@@ -41,6 +41,11 @@ Usage of gost2012:
 sign=$(cat sign.txt)
 ./gost2012 -verify -key $pubkey -signature $sign < file.ext
 ```
+#### Asymmetric Encryption:
+```sh
+./gost2012 -enc -key $pubkey < file.ext > file.enc
+./gost2012 -dec -key $prvkey < file.enc
+```
 #### Shared key agreement (ECDH a.k.a. VKO):
 ```sh
 ./gost2012 -derive -key $prvkey -pub $pubkey
