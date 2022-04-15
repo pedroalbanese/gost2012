@@ -149,6 +149,11 @@ func main() {
 
 		verifystatus := Verify(h.Sum(nil), sig, pub)
 		fmt.Println(verifystatus)
+		if verifystatus {
+			os.Exit(0)
+		} else {
+			os.Exit(1)
+		}	
 		os.Exit(0)
 	}
 
