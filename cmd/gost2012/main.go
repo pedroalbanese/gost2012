@@ -321,6 +321,7 @@ func ReadPublicKeyFromHexX(Qhex string) (*PublicKey, error) {
 	pub.Y = new(big.Int).SetBytes(q[64:])
 	return pub, nil
 }
+
 func WritePublicKeyToHex(key *ecdsa.PublicKey) string {
 	x := key.X.Bytes()
 	y := key.Y.Bytes()
@@ -467,14 +468,12 @@ func Encrypt(pub *PublicKey, data []byte, random io.Reader, mode int) ([]byte, e
 		tm = append(tm, x2Buf...)
 		tm = append(tm, data...)
 		tm = append(tm, y2Buf...)
-
 		Sum512 := func(msg []byte) []byte {
 			res := sha512.New()
 			res.Write(msg)
 			hash := res.Sum(nil)
 			return []byte(hash)
 		}
-
 		h := Sum512(tm)
 		c = append(c, h...)
 		ct, ok := kdf(length, x2Buf, y2Buf)
@@ -550,14 +549,12 @@ func Decrypt(priv *PrivateKey, data []byte, mode int) ([]byte, error) {
 	tm = append(tm, x2Buf...)
 	tm = append(tm, c...)
 	tm = append(tm, y2Buf...)
-
 	Sum512 := func(msg []byte) []byte {
 		res := sha512.New()
 		res.Write(msg)
 		hash := res.Sum(nil)
 		return []byte(hash)
 	}
-
 	h := Sum512(tm)
 	if bytes.Compare(h, data[128:192]) != 0 {
 		return c, errors.New("Decrypt: failed to decrypt")
