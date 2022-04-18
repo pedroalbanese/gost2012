@@ -1,6 +1,5 @@
 # GOST2012
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](https://github.com/pedroalbanese/gost2012/blob/master/LICENSE.md) 
-[![GitHub downloads](https://img.shields.io/github/downloads/pedroalbanese/gost2012/total.svg?logo=github&logoColor=white)](https://github.com/pedroalbanese/gost2012/releases)
 [![GoDoc](https://godoc.org/github.com/pedroalbanese/gost2012?status.png)](http://godoc.org/github.com/pedroalbanese/gost2012)
 [![Go Report Card](https://goreportcard.com/badge/github.com/pedroalbanese/gost2012)](https://goreportcard.com/report/github.com/pedroalbanese/gost2012)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pedroalbanese/gost2012)](https://github.com/pedroalbanese/gost2012/releases)
