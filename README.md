@@ -11,11 +11,11 @@ Package implements the elliptic curves originally described in RFC 7836
 ```
 Usage of gost2012:
   -dec
-        Decrypt with EC-GOST2012 Private key
+        Decrypt with Private key
   -derive
         Derive shared secret key
   -enc
-        Encrypt with EC-GOST2012 Public key
+        Encrypt with Public key
   -key string
         Private/Public key
   -keygen
