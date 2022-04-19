@@ -25,9 +25,9 @@ import (
 )
 
 var (
-	dec    = flag.Bool("dec", false, "Decrypt with EC-GOST2012 Private key.")
+	dec    = flag.Bool("dec", false, "Decrypt with Private key.")
 	derive = flag.Bool("derive", false, "Derive shared secret key.")
-	enc    = flag.Bool("enc", false, "Encrypt with EC-GOST2012 Public key.")
+	enc    = flag.Bool("enc", false, "Encrypt with Public key.")
 	key    = flag.String("key", "", "Private/Public key.")
 	keygen = flag.Bool("keygen", false, "Generate keypair.")
 	public = flag.String("pub", "", "Remote's side Public key.")
